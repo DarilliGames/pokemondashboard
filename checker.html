@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+    <form id="myForm">
+      First name: <input type="text" name="fname" id="fname"><br>
+      Last name: <input type="text" name="lname" id ="lname"><br>
+      BirthDay Number: <input type="text" name="day" id ="day"><br>
+      BirthMonth Number: <input type="text" name="month" id ="month"><br>
+      BirthYear Number: <input type="text" name="year" id ="year"><br>
+      <input type="button" onclick="myFunction()" value="Submit form">
+    </form>
+
+    <p id="demo"></p>
+<script>
+function myFunction() {
+    var fName = (document.getElementById("fname").value).toLowerCase();
+    var lName = (document.getElementById("lname").value).toLowerCase();
+    var bDay = parseInt(document.getElementById("day").value);
+    var bMonth = parseInt(document.getElementById("month").value);
+    var bYear = parseInt(document.getElementById("year").value);
+    
+    
+    function letToNum(whatString){
+        var gtype = 2;
+        for (var i = 0; i < whatString.length; i++) { 
+            gtype = gtype + (whatString[i]).charCodeAt() - 96;
+        }
+        return gtype;
+    }
+    
+    function mixedDedicated(entry){
+        if ((entry%3) == 1){
+            return "single type";
+        }
+        else{
+            return "mixed";
+        }
+    }
+    
+    
+    var pTypes = ["Normal", "Grass", "Fire", "Water", "Electric", "Rock", "Fighting", 
+    "Psychic", "Ghost", "Poison", "Dragon", "Ice", "Dark", "Bug", "Fairy", "Flying", 
+    "Ground", "Steel"];
+    
+    var playerFavType = pTypes[letToNum(lName) % 18];
+    var multitype = mixedDedicated(letToNum(fName))+ " ";
+    
+    var firstP = 1 + ( ( (letToNum(fName)  )  * (parseInt(bMonth)+parseInt(bDay))%802));
+    var secondP = 1 + ( ((parseInt(bYear)*2) - ((parseInt(bDay)*2) ))%802);
+    var thirdP =  1 + ((parseInt(bYear) + (parseInt(bMonth)))%802);
+    var fourthP =  1 + ((parseInt(bYear) * (parseInt(bMonth)))%802);
+    var fifthP =  (parseInt(bDay)*2) + (parseInt(bMonth)*3)%802;
+    var sixthP =  1 + (letToNum(fName)%802);
+    
+    
+    
+    
+    document.getElementById("demo").innerHTML = "You would most likely be a " + multitype + playerFavType
+        + " Pokemon - Trainer.  Look up pokemon number " + firstP + " " + secondP + " " + thirdP + " " + fourthP 
+        + " " + fifthP + " " + sixthP;
+    
+    
+    
+    
+}
+
+</script>
+    
+    
+</body>
+</html>
