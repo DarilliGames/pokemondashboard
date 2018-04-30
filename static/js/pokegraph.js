@@ -1,10 +1,11 @@
 queue()
     .defer(d3.json, "/data")
     .await(makeGraph);
-        
-function makeGraph(error, pokemon){
-    var ndx = crossfilter(pokemon);
 
+function makeGraph(error, pokemon){
+    
+    var ndx = crossfilter(pokemon);
+    
     pokemon.forEach(function(d){
         d.Generation = parseInt(d.Generation);
         d.Total = parseInt(d.Total);
@@ -16,14 +17,16 @@ function makeGraph(error, pokemon){
         d.Speed = parseInt(d.Speed);
         
         });
+    var g = window.screen.clientWidth;
+    
     
     var m = ndx.dimension(dc.pluck("Type1"));
     var n = m.group().reduceCount();
-    drawBarChart("#chart01", m, n, "x", "y");
+    drawBarChart("#chart01", m, n, "Pokemon Type", "Count", g*.4);
     
     var q = ndx.dimension(dc.pluck("Type2"));
     var w = q.group().reduceCount();
-    drawBarChart("#chart02", q, w, "x", "y");
+    drawBarChart("#chart02", q, w, "x", "Count", g*.4);
     
     var genDim = ndx.dimension(dc.pluck("Generation"));
     var genGroup = genDim.group().reduceCount();
@@ -37,74 +40,45 @@ function makeGraph(error, pokemon){
         .dimension(leg_dim)
         .group(leg_group);
     
-    // var meg_dim = ndx.dimension(dc.pluck("Generation"));
-    // var meg_group = meg_dim.group().reduce(
-    //     function (p, v){
-    //         p.total++;
-    //         if(v.Generation == "9"){
-    //             p.count++;
-    //     }
-      
-    //     return p;
-        
-    // },
-    
-    // function (p, v){
-    //     p.total--;
-    //     if (p.total>0){
-    //         if(v.Generation == "9"){
-    //         p.count--;
+    var mega_dim = ndx.dimension(dc.pluck("Generation"));
+    var mega_group = mega_dim.group().reduce(add_mega, remove_mega, init_megas);
+        function add_mega(p, v){
+            if (v.Generation == 9){
+                p++;
+                return p;
+            }
             
-    //         }
-    //     }
-        
-    //     else {
-    //         p.count = 0;
+        }
+        function remove_mega(p, v){
+            if (v.Generation == 9){
+                p--;
+                return p;
+            }
             
-    //     }
-    //     return p;
-        
-    // },
-    // function (){
-    //     return { count : 0, total : 0};
-            
-        
-    // });
-    // dc.selectMenu("#selectmega")
-    //     .dimension(meg_group)
-    //     .group(meg_group);
+        }
+        function init_megas(p, v){
+            return p = 0;
+        }
     
-    
-    // var totalDim = ndx.dimension(dc.pluck("Total"));
-    // var dimGroup = totalDim.group();
+    dc.selectMenu("#selectmegas")
+        .dimension(mega_dim)
+        .group(mega_group);
+        
     scatterServiceStats(ndx, "Total", "#chart04");
-    // scatterPlotGenStat("#chart03", 1, 800, totalDim, dimGroup);
     
 
-    
-    // dc.numberDisplay("#otherNumber")
-    //     .formatNumber(d3.format(".2%"))
-    //     .valueAccessor(function (d) {
-    //         return d.percent;
-    //     })
-    //     .group(allCount);
-    
-    
-    
-    
-    ///                                                       If you need to change the typeOf(data)                                                       /// 
-    
     
     
     dc.renderAll();
     
 }
 function drawGenChart(ele, dim, group, x){
+    
     dc.pieChart(ele)
-        .width(768)
-        .height(480)
+        .width(300)
+        .height(300)
         .slicesCap(8)
-        .innerRadius(10)
+        .innerRadius(0)
         .dimension(dim)
         .group(group)
         .legend(dc.legend())
@@ -116,13 +90,21 @@ function drawGenChart(ele, dim, group, x){
 
 }
 
-function drawBarChart(ele, dim, groups, xlabel, ylabel){
+function drawBarChart(ele, dim, groups, xlabel, ylabel, width){
+    var genColors = d3.scale.ordinal()
+        .domain(["Fire", "Water", "Grass", "Electric", "Normal", "Poison", "Fighting",   "Dark", "Steel", "Bug", "Ice", "Ground", "Dragon", "Psychic", "Fairy", "Flying", "Rock", "Ghost"])
+        .range([  "red",  "blue", "green",   "yellow",  "DarkKhaki", "purple",    "brown", "black",  "gray", "lightgreen", "lightblue", "chocolate", "DarkSlateGray", "Fuchsia", "LightCoral", "SaddleBrown", "LightSlateGray", "Indigo"]);
+    
     dc.barChart(ele)
-        .width(750)
+        .width(width)
         .height(400)
-        .margins({top: 10, right: 50, bottom: 30, left: 50})
+        .margins({top: 10, right: 30, bottom: 30, left: 30})
         .dimension(dim)
         .group(groups)
+        .colorAccessor(function (d) {
+            return d.key;
+        })
+        .colors(genColors)
         .transitionDuration(500)
         .x(d3.scale.ordinal())
         .xUnits(dc.units.ordinal)
@@ -131,28 +113,7 @@ function drawBarChart(ele, dim, groups, xlabel, ylabel){
         .yAxis().ticks(4);
 }
 
-// function scatterPlotGenStat(ele, minExperience, maxExperience, statTotal, highestStat){
-//     dc.scatterPlot(ele)
-//         .width(800)
-//         .height(400)
-//         .x(d3.scale.linear().domain([minExperience,maxExperience]))
-//         .brushOn(true)
-//         .symbolSize(8)
-//         .clipPadding(10)
-//         .yAxisLabel("Salary")
-//         .xAxisLabel("Years Of Service")
-//         .title(function (d) {
-//             return d.key[2] + " earned " + d.key[1];
-//         })
-//         // .colorAccessor(function (d) {
-//         //     return d.key[3];
-//         // })
-//         // .colors(genderColors)
-//         .dimension(statTotal)
-//         .group(highestStat)
-//         .margins({top: 10, right: 50, bottom: 75, left: 75});
-        
-// }
+
 function scatterServiceStats(ndx, what, ele) {
     var genColors = d3.scale.ordinal()
         .domain(["1", "2", "3", "4", "5", "6", "7", "8", "9"])
@@ -187,13 +148,12 @@ function scatterServiceStats(ndx, what, ele) {
     //     }, d.Name, d.Generation];
     // });
     var highestStatGroup = totalDim.group();
-    console.log(highestStatGroup.all());
     var minExperience = eDim.bottom(1)[0].Total;
     var maxExperience = (eDim.top(1)[0].Total + 50);
 
     dc.scatterPlot(ele)
-        .width(800)
-        .height(800)
+        .width(500)
+        .height(500)
         .x(d3.scale.linear().domain([minExperience,maxExperience]))
         .brushOn(true)
         .symbolSize(8)
@@ -212,4 +172,3 @@ function scatterServiceStats(ndx, what, ele) {
         .margins({top: 10, right: 50, bottom: 75, left: 75});
         
 }
-

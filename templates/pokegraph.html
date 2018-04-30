@@ -12,56 +12,95 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js"></script>
     
     <script type="text/javascript" src="/static/js/pokegraph.js"></script>
+    
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/dc/2.1.8/dc.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
+    
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     
 </head>
 <body>
     
-    
-    
-    Do you want to include Legendary Pokemon in your search? <div id="selectlegend"></div>
-    <!--Do you want to include Mega Evolution in your search? <div id="selectmega"></div>-->
-    </br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <div>
-        <div style="display: inline-block; text-align: center">
-            <div id="chart01"></div>
-            <div>Primary Type</div>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12" style="text-align:center">
+                <div class="col-sm-offset-3 col-sm-6">
+                    <img src="/static/img/pokelogo.png" style="width: 100%">
+                </div>
+            </div>
+            <div class="col-xs-12" style="text-align:center">
+                <div class="col-sm-offset-3 col-sm-6">
+                    <img src="/static/img/gsea.png" style="width: 60%">
+                </div>
+                <div class="col-sm-3 apply">
+                    <h4>
+                        Take our Pokemon Team Test! <a href="checker" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">Here</a>
+                    </h4>
+                </div>
+            </div>
         </div>
-        <div style="display: inline-block; text-align: center">
-            <div id="chart02"></div>
-            <div>Secondary Type</div>
-        </div>
-    </div>
-    <br>
-    </br>
-    <div id="genPie"></div>
-    </br>
-    <div id="chart04"></div>
-    </br>
-    <div id="someNumber"></div>
-    <br>
-    <div id="otherNumber"></div>
-    <br>
-    <div id="chart99"></div>
-    
-    <div id="what">
-        <div id="here">
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3 apply">
+                <h4>Do you want to include Legendary Pokemon in your search? <div id="selectlegend"></div></h4>
+                <br>
+                <h4>Do you want to look at just Mega Pokemon? <div id="selectmegas"></div></h4>
+            </div>
             
         </div>
     </div>
-    <br>
-    <div style="display: block">
-    Bellow here
-    {% for user in apple %}
-  <div style="display: inline-block; width: 80px; height: 80px; background-color: red; vertical-align: top">{{ user.Name }}</div>
-    {% endfor %}
-    {% for b in banana %}
-  <p>{{ b.Name }}</p>
-    {% endfor %}
+    <div class="container-fluid">
+            
+    
+    <div class="row">
+        <div class="col-sm-5 col-sm-offset-1" style="text-align: center">
+            <div id="chart01"></div>
+            
+            <div class="row">
+                <h3 class="apply">Primary Type</h3>
+            </div>
+        </div>
+        <div class="col-sm-5" style="text-align: center">
+            <div id="chart02"></div>
+            <div class="row">
+                <h3 class="apply">Second Type</h3>
+            </div>
+        </div>
+    </div>
+    
+    
+    <div class="row">
+        <div class="col-sm-4">
+            <div id="genPie"></div>
+            <p>Here you can select a Generation.  Which was your favourite?</p>
+            <p>See how they compare to other Generations!</p>
+            
+        </div>
+        <div class="col-sm-8">
+            <div id="chart04"></div>
+            <div>Stat Distribution</div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-sm-6">
+        </div>
+        <div class="col-sm-6">
+            
+        </div>
+    </div>
+    
+    
+    
+    
+    
     </div>
     
 
