@@ -17,6 +17,8 @@ def getData():
         pokemon = collection.find(projection=FIELDS)
         return list(pokemon)
 
+
+
 def letToNum(whatString):
     gtype = 2;
     for num in whatString:
@@ -28,6 +30,10 @@ def get_home_page():
     here=(getData())
     green = here
     return render_template("pokegraph.html", apple = green)
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template("404.html"), 404
     
 @app.route("/type/<info>")
 def get_home_type(info):
@@ -52,7 +58,6 @@ def get_Pokemonnum(pkinfo):
     for x in here:
         if int(x["#"]) == int(pkinfo):
             return redirect("/pokemon/"+x["Name"])
-    return render_template("pokemon.html")
 
 
 @app.route("/data")
